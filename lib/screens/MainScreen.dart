@@ -43,9 +43,8 @@ class MainScreen extends StatelessWidget {
                     height: 20,
                     width: double.infinity,
                   ),
-                  if (userRole != 'user' &&
-                      userRole !=
-                          'regular user') // Check if the role is not 'user' or 'regular user'
+                  if (userRole !=
+                      'user') // Check if the role is not 'user' or 'regular user'
                     ElevatedButton(
                       onPressed: () {
                         // Navigate to the corresponding collection based on the user's role
@@ -57,7 +56,7 @@ class MainScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Text('Open Collection'),
+                      child: Text('Notificastion'),
                     ),
                 ],
               );

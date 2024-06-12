@@ -16,9 +16,8 @@ class CollectionScreen extends StatelessWidget {
         stream: FirebaseFirestore.instance.collection(role).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            // Print error details for debugging
             print('Error: ${snapshot.error}');
-            return Text('Error: ${snapshot.error}');
+            return Center(child: Text('Error: ${snapshot.error}'));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -29,16 +28,68 @@ class CollectionScreen extends StatelessWidget {
             return Center(child: Text('No data available'));
           }
 
-          // Print document count for debugging
           print('Document count: ${snapshot.data!.docs.length}');
 
           return ListView(
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
               Map<String, dynamic> data =
                   document.data() as Map<String, dynamic>;
-              return ListTile(
-                title: Text(data['name'] ?? ''), // Change to 'name'
-                subtitle: Text(data['time'] ?? ''), // Change to 'time'
+
+              return Card(
+                color: Colors.black87,
+                margin: EdgeInsets.all(10),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Document ID:',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.blue.shade700),
+                          ),
+                          SizedBox(width: 15),
+                          Text(
+                            '${document.id}',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      ...data.entries.map((entry) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${entry.key}:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.blueAccent.shade100),
+                            ),
+                            SizedBox(width: 15),
+                            Text(
+                              '${entry.value}',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        );
+
+                        //  Text(
+                        //   '${entry.key}: ${entry.value}',
+                        //   style: TextStyle(
+                        //       fontWeight: FontWeight.normal,
+                        //       color: Colors.white),
+                        // );
+                      }).toList(),
+                    ],
+                  ),
+                ),
               );
             }).toList(),
           );
