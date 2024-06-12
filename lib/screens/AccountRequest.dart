@@ -1,22 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class CollectionScreen extends StatelessWidget {
-  const CollectionScreen({Key? key, required this.role}) : super(key: key);
-
-  final String role;
+class AccountRequestScreen extends StatelessWidget {
+  const AccountRequestScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notfications'),
+        title: Text('Account Requests'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection(role)
-            .doc('Notifications')
-            .collection('notifi')
+            .collection('admin')
+            .doc('AccountRequest')
+            .collection('requests')
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {

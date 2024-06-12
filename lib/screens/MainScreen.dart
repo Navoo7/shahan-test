@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shahan/auth_services/auth_services.dart';
+import 'package:shahan/screens/AccountRequest.dart';
 import 'package:shahan/screens/CollectionScreen.dart';
 
 class MainScreen extends StatelessWidget {
@@ -36,18 +37,16 @@ class MainScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 24, color: Colors.black),
                   ),
                   SizedBox(height: 20),
-                  // Text('Email: ${userData['email'] ?? 'N/A'}'),
-                  // Text('Name: ${userData['name'] ?? 'N/A'}'),
-                  // Text('Role: ${userData['role'] ?? 'N/A'}'),
+                  Text('Email: ${userData['email'] ?? 'N/A'}'),
+                  Text('Name: ${userData['name'] ?? 'N/A'}'),
+                  Text('Role: ${userData['role'] ?? 'N/A'}'),
                   SizedBox(
                     height: 20,
                     width: double.infinity,
                   ),
-                  if (userRole !=
-                      'user') // Check if the role is not 'user' or 'regular user'
+                  if (userRole != 'user')
                     ElevatedButton(
                       onPressed: () {
-                        // Navigate to the corresponding collection based on the user's role
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -57,6 +56,22 @@ class MainScreen extends StatelessWidget {
                         );
                       },
                       child: Text('Notificastion'),
+                    ),
+                  SizedBox(
+                    height: 20,
+                    width: double.infinity,
+                  ),
+                  if (userRole == 'admin')
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AccountRequestScreen(),
+                          ),
+                        );
+                      },
+                      child: Text('Account Rerquest'),
                     ),
                 ],
               );
