@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "851468904224",
+    "project_id": "shahan-app",
+    "storage_bucket": "shahan-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851468904224:android:dc8988b53ccc5655741945",
+        "android_client_info": {
+          "package_name": "com.example.shahan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAT2mOLNBWtxRozC-Fi1ayEWaIbyABfE5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851468904224:android:bfe5568c99b23058741945",
+        "android_client_info": {
+          "package_name": "com.shahan.shahan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAT2mOLNBWtxRozC-Fi1ayEWaIbyABfE5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
