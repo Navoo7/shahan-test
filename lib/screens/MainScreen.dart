@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shahan/auth_services/auth_services.dart';
 import 'package:shahan/screens/AccountRequest.dart';
+import 'package:shahan/screens/AddWorkers.dart';
 import 'package:shahan/screens/BarberRequest.dart';
 import 'package:shahan/screens/CollectionScreen.dart';
 import 'package:shahan/screens/sendrequest.dart';
@@ -73,7 +74,23 @@ class MainScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Text('Account Rerquest'),
+                      child: Text('Account Request'),
+                    ),
+                  SizedBox(
+                    height: 20,
+                    width: double.infinity,
+                  ),
+                  if (userRole == 'admin')
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddWorkerScreen(),
+                          ),
+                        );
+                      },
+                      child: Text('Worker Account Add'),
                     ),
                   SizedBox(
                     height: 20,
@@ -91,17 +108,18 @@ class MainScreen extends StatelessWidget {
                       },
                       child: Text('Account Rerquest Report'),
                     ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SendBarberRequestScreen(),
-                        ),
-                      );
-                    },
-                    child: Text('Barber Request'),
-                  ),
+                  if (userRole == 'user')
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SendBarberRequestScreen(),
+                          ),
+                        );
+                      },
+                      child: Text('Barber Request'),
+                    ),
                 ],
               );
             } else {

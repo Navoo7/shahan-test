@@ -14,7 +14,7 @@ class AuthService {
 
   Future<void> saveUserData(User user) async {
     DocumentSnapshot userDoc =
-        await _firebaseFirestore.collection('users').doc(user.uid).get();
+        await _firebaseFirestore.collection('Accounts').doc(user.uid).get();
 
     if (userDoc.exists) {
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
@@ -31,5 +31,41 @@ class AuthService {
     String? name = prefs.getString('name');
     String? role = prefs.getString('role');
     return {'email': email, 'name': name, 'role': role};
+  }
+
+  Future<void> addWorker(
+      String name, String email, String password, String role) async {
+    try {
+      UserCredential userCredential =
+          await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      await _firebaseFirestore
+          .collection('Accounts')
+          .doc(userCredential.user!.uid)
+          .set({
+        'name': name,
+        'email': email,
+        'role': role,
+        'password': password
+      });
+    } catch (e) {
+      throw Exception('Error adding worker: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>?> getWorkerDetails(String workerId) async {
+    try {
+      DocumentSnapshot workerSnapshot =
+          await _firebaseFirestore.collection('Accounts').doc(workerId).get();
+      if (workerSnapshot.exists) {
+        return workerSnapshot.data() as Map<String, dynamic>;
+      }
+      return null;
+    } catch (e) {
+      throw Exception('Error fetching worker details: $e');
+    }
   }
 }

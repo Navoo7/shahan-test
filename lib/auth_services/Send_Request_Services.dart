@@ -12,6 +12,7 @@ class RequestService {
   }
 
   Future<void> sendBarberRequest(Map<String, dynamic> requestData) async {
-    await _firebaseFirestore.collection('programmer').add(requestData);
+    await _firebaseFirestore.collection('barber')
+      ..doc('Notifications').collection('notifi').add(requestData);
   }
 }
