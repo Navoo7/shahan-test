@@ -29,28 +29,31 @@ class _SplashScreeenState extends State<SplashScreeen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              width: double.infinity,
-              height: 140,
-            ),
-            Image.asset(
-              MyImage.minuspluas,
-              scale: 1.1,
-            ),
-            const SizedBox(
-              width: double.infinity,
-              height: 240,
-            ),
-            // const SpinKitCubeGrid(
-            //   size: 35,
-            //   color: Colors.black,
-            // )
-            Image.asset(MyImage.noti)
-          ],
+      body: SingleChildScrollView(
+        reverse: false,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: double.infinity,
+                height: 140,
+              ),
+              Image.asset(
+                MyImage.minuspluas,
+                scale: 1.1,
+              ),
+              const SizedBox(
+                width: double.infinity,
+                height: 240,
+              ),
+              // const SpinKitCubeGrid(
+              //   size: 35,
+              //   color: Colors.black,
+              // )
+              Image.asset(MyImage.noti)
+            ],
+          ),
         ),
       ),
     );

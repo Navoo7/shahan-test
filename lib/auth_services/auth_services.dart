@@ -14,11 +14,12 @@ class AuthService {
 
   Future<void> saveUserData(User user) async {
     DocumentSnapshot userDoc =
-        await _firebaseFirestore.collection('Accounts').doc(user.uid).get();
+        await _firebaseFirestore.collection('accounts').doc(user.uid).get();
 
     if (userDoc.exists) {
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('uid', user.uid); // Save UID as well
       await prefs.setString('email', userData['email']);
       await prefs.setString('name', userData['name']);
       await prefs.setString('role', userData['role']);
@@ -27,11 +28,21 @@ class AuthService {
 
   Future<Map<String, String?>> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString('uid'); // Retrieve UID
     String? email = prefs.getString('email');
     String? name = prefs.getString('name');
     String? role = prefs.getString('role');
-    return {'email': email, 'name': name, 'role': role};
+    return {'uid': uid, 'email': email, 'name': name, 'role': role};
   }
+
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////
 
   Future<void> addWorker(
       String name, String email, String password, String role) async {
@@ -43,7 +54,7 @@ class AuthService {
       );
 
       await _firebaseFirestore
-          .collection('Accounts')
+          .collection('accounts')
           .doc(userCredential.user!.uid)
           .set({
         'name': name,
@@ -59,7 +70,7 @@ class AuthService {
   Future<Map<String, dynamic>?> getWorkerDetails(String workerId) async {
     try {
       DocumentSnapshot workerSnapshot =
-          await _firebaseFirestore.collection('Accounts').doc(workerId).get();
+          await _firebaseFirestore.collection('accounts').doc(workerId).get();
       if (workerSnapshot.exists) {
         return workerSnapshot.data() as Map<String, dynamic>;
       }
@@ -68,4 +79,6 @@ class AuthService {
       throw Exception('Error fetching worker details: $e');
     }
   }
+  ////////////////////////////////////////////////
+  ///////////////////////////////////////////////
 }

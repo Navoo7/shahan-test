@@ -206,11 +206,23 @@ class _AddWorkerScreenState extends State<AddWorkerScreen> {
                 height: 70,
                 child: DropdownButtonFormField<String>(
                   value: _selectedRole,
-                  items: <String>['admin', 'programmer', 'designer', 'manager']
-                      .map((String value) {
+                  items: <String>[
+                    'cleaner',
+                    'programmer',
+                    'designer',
+                    'manager',
+                    'barber',
+                    'user'
+                  ].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                      ),
                     );
                   }).toList(),
                   onChanged: (newValue) {
@@ -227,7 +239,7 @@ class _AddWorkerScreenState extends State<AddWorkerScreen> {
                     hintText: 'Role',
                     hintStyle: const TextStyle(
                       color: Colors.grey,
-                      fontSize: 10,
+                      fontSize: 14,
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide:

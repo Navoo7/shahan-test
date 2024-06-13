@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shahan/auth_services/auth_services.dart';
-import 'package:shahan/screens/AccountRequest.dart';
+import 'package:shahan/screens/Dashbord_AccountRequest.dart';
 import 'package:shahan/screens/AddWorkers.dart';
 import 'package:shahan/screens/BarberRequest.dart';
 import 'package:shahan/screens/CollectionScreen.dart';
-import 'package:shahan/screens/sendrequest.dart';
+import 'package:shahan/screens/Login.dart';
+import 'package:shahan/screens/Report.dart';
+import 'package:shahan/screens/Account_Request.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -47,6 +49,22 @@ class MainScreen extends StatelessWidget {
                     height: 20,
                     width: double.infinity,
                   ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _authService.signOut();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Login(),
+                        ),
+                      );
+                    },
+                    child: Text('Logout'),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    width: double.infinity,
+                  ),
                   if (userRole != 'user')
                     ElevatedButton(
                       onPressed: () {
@@ -70,7 +88,7 @@ class MainScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AccountRequestScreen(),
+                            builder: (context) => AdminDashboard(),
                           ),
                         );
                       },
@@ -102,12 +120,32 @@ class MainScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SendAccountRequestScreen(),
+                            builder: (context) => Report(),
+                          ),
+                        );
+                      },
+                      child: Text('reports'),
+                    ),
+                  SizedBox(
+                    height: 20,
+                    width: double.infinity,
+                  ),
+                  if (userRole == 'user')
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AccountRequestForm(),
                           ),
                         );
                       },
                       child: Text('Account Rerquest Report'),
                     ),
+                  SizedBox(
+                    height: 20,
+                    width: double.infinity,
+                  ),
                   if (userRole == 'user')
                     ElevatedButton(
                       onPressed: () {
@@ -120,6 +158,10 @@ class MainScreen extends StatelessWidget {
                       },
                       child: Text('Barber Request'),
                     ),
+                  SizedBox(
+                    height: 20,
+                    width: double.infinity,
+                  ),
                 ],
               );
             } else {

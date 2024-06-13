@@ -6,13 +6,21 @@ class RequestService {
   Future<void> sendUserRequest(Map<String, dynamic> requestData) async {
     await _firebaseFirestore
         .collection('admin')
-        .doc('AccountRequest')
+        .doc('accountrequest')
         .collection('requests')
+        .add(requestData);
+  }
+
+  Future<void> report(Map<String, dynamic> requestData) async {
+    await _firebaseFirestore
+        .collection('admin')
+        .doc('userreports')
+        .collection('report')
         .add(requestData);
   }
 
   Future<void> sendBarberRequest(Map<String, dynamic> requestData) async {
     await _firebaseFirestore.collection('barber')
-      ..doc('Notifications').collection('notifi').add(requestData);
+      ..doc('notifications').collection('notifi').add(requestData);
   }
 }

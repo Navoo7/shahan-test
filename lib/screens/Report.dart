@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class AccountRequestScreen extends StatelessWidget {
-  const AccountRequestScreen({Key? key}) : super(key: key);
+class Report extends StatelessWidget {
+  const Report({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +13,8 @@ class AccountRequestScreen extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('admin')
-            .doc('AccountRequest')
-            .collection('requests')
+            .doc('userreports')
+            .collection('report')
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
