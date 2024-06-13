@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shahan/auth_services/auth_services.dart';
 import 'package:shahan/screens/AccountRequest.dart';
+import 'package:shahan/screens/BarberRequest.dart';
 import 'package:shahan/screens/CollectionScreen.dart';
+import 'package:shahan/screens/sendrequest.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -73,6 +75,33 @@ class MainScreen extends StatelessWidget {
                       },
                       child: Text('Account Rerquest'),
                     ),
+                  SizedBox(
+                    height: 20,
+                    width: double.infinity,
+                  ),
+                  if (userRole == 'user')
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SendAccountRequestScreen(),
+                          ),
+                        );
+                      },
+                      child: Text('Account Rerquest Report'),
+                    ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SendBarberRequestScreen(),
+                        ),
+                      );
+                    },
+                    child: Text('Barber Request'),
+                  ),
                 ],
               );
             } else {
