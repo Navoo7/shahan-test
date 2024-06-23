@@ -12,9 +12,9 @@ class Report extends StatelessWidget {
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('admin')
-            .doc('userreports')
-            .collection('report')
+            .collection('barber')
+            .doc('notifications')
+            .collection('notifi')
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {

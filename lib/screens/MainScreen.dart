@@ -3,7 +3,6 @@ import 'package:shahan/auth_services/auth_services.dart';
 import 'package:shahan/screens/Dashbord_AccountRequest.dart';
 import 'package:shahan/screens/AddWorkers.dart';
 import 'package:shahan/screens/BarberRequest.dart';
-import 'package:shahan/screens/CollectionScreen.dart';
 import 'package:shahan/screens/Login.dart';
 import 'package:shahan/screens/Report.dart';
 import 'package:shahan/screens/Account_Request.dart';
@@ -71,8 +70,7 @@ class MainScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                CollectionScreen(role: userRole),
+                            builder: (context) => Report(),
                           ),
                         );
                       },
