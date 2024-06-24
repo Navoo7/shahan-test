@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shahan/models/user_model.dart'; // Assuming you have a UserModel class
+import 'package:shahan/models/user_model.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -23,11 +23,7 @@ class AuthService {
     return _firebaseAuth.currentUser;
   }
 
-  Future<UserModel?> signUp(
-    String name,
-    String email,
-    String password,
-  ) async {
+  Future<UserModel?> signUp(String name, String email, String password) async {
     try {
       UserCredential userCredential =
           await _firebaseAuth.createUserWithEmailAndPassword(

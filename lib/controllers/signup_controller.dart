@@ -28,7 +28,10 @@ class SignUpController {
       if (user != null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MainScreen()),
+          MaterialPageRoute(
+              builder: (context) => const MainScreen(
+                    userRole: '',
+                  )),
         );
       } else {
         _showSnackBar(context, 'Sign Up Failed', Colors.red);

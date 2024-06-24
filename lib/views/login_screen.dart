@@ -4,7 +4,7 @@ import 'package:shahan/widgets/custom_button.dart';
 import 'package:shahan/widgets/custom_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -27,7 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const Padding(
                   padding: EdgeInsets.only(
-                      top: 160, left: 40, right: 40, bottom: 15),
+                    top: 160,
+                    left: 40,
+                    right: 40,
+                    bottom: 15,
+                  ),
                   child: Text(
                     "Login Test",
                     style: TextStyle(
@@ -39,7 +43,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 40, left: 40, right: 40, bottom: 0),
+                    top: 40,
+                    left: 40,
+                    right: 40,
+                    bottom: 0,
+                  ),
                   child: CustomTextField(
                     controller: _controller.emailController,
                     hintText: 'EMAIL',
@@ -47,7 +55,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 20, left: 40, right: 40, bottom: 0),
+                    top: 20,
+                    left: 40,
+                    right: 40,
+                    bottom: 0,
+                  ),
                   child: CustomTextField(
                     controller: _controller.passwordController,
                     hintText: 'PASSWORD',
