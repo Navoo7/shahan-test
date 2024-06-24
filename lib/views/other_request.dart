@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shahan/controllers/main_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shahan/views/account_details.dart';
+import 'package:shahan/views/request_details.dart';
 
-class AcccountRequestScreen extends StatefulWidget {
-  const AcccountRequestScreen({Key? key}) : super(key: key);
+class OtherRequest extends StatefulWidget {
+  const OtherRequest({Key? key}) : super(key: key);
 
   @override
-  State<AcccountRequestScreen> createState() => _AcccountRequestScreenState();
+  State<OtherRequest> createState() => _OtherRequestState();
 }
 
-class _AcccountRequestScreenState extends State<AcccountRequestScreen> {
+class _OtherRequestState extends State<OtherRequest> {
   final MainController _controller = MainController();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
@@ -24,7 +24,7 @@ class _AcccountRequestScreenState extends State<AcccountRequestScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account Request Screen'),
+        title: const Text('Other Request'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -36,10 +36,8 @@ class _AcccountRequestScreenState extends State<AcccountRequestScreen> {
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _db
-            .collection('admin')
-            .doc('accountrequest')
             .collection('requests')
-            .where('approved', isEqualTo: false)
+            .orderBy('timestamp', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -79,7 +77,7 @@ class _AcccountRequestScreenState extends State<AcccountRequestScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Name: ${data['name']}',
+                Text('name: ${data['name']}',
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 Text('Email: ${data['email']}', style: TextStyle(fontSize: 16)),
@@ -95,8 +93,8 @@ class _AcccountRequestScreenState extends State<AcccountRequestScreen> {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AccountRequestDetailScreen(
-                        requestData: data, docId: docId),
+                    builder: (context) =>
+                        RequestDetails(requestData: data, docId: docId),
                   ),
                 ),
                 child: Text(

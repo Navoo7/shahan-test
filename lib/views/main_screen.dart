@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shahan/controllers/main_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shahan/views/account_request_screen.dart';
+import 'package:shahan/views/notifications_user.dart';
+import 'package:shahan/views/other_request.dart';
+import 'package:shahan/views/request_form_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key, required this.userRole}) : super(key: key);
@@ -49,15 +52,20 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       body: _buildBody(widget.userRole),
-      floatingActionButton: widget.userRole == 'worker'
-          ? null
-          : FloatingActionButton(
-              onPressed: () {
-                // Example of using currentUser:
-                print(_controller.currentUser?.email);
-              },
-              child: const Icon(Icons.add),
-            ),
+      // floatingActionButton: widget.userRole != 'user'
+      //     ? null
+      //     : FloatingActionButton(
+      //         onPressed: () {
+      //           // Example of using currentUser:
+      //           print(_controller.currentUser?.email);
+      //           Navigator.pushReplacement(
+      //               context,
+      //               MaterialPageRoute(
+      //                 builder: (context) => RequestFormScreen(),
+      //               ));
+      //         },
+      //         child: const Icon(Icons.add),
+      //       ),
     );
   }
 
@@ -72,8 +80,8 @@ class _MainScreenState extends State<MainScreen> {
                 'Other Requests', Icons.request_page, _viewOtherRequests),
             _buildCard('Send Notifications', Icons.notification_important,
                 _sendNotifications),
-            _buildCard(
-                'Notifications', Icons.notifications, _viewNotifications),
+            // _buildCard(
+            //     'Notifications', Icons.notifications, _viewNotifications),
             _buildCard('Add Alert', Icons.add_alert, _addAlert),
           ],
         );
@@ -186,6 +194,10 @@ class _MainScreenState extends State<MainScreen> {
 
   void _viewOtherRequests() {
     // Implement navigation to other requests screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OtherRequest()),
+    );
   }
 
   void _sendNotifications() {
@@ -194,6 +206,10 @@ class _MainScreenState extends State<MainScreen> {
 
   void _viewNotifications() {
     // Implement navigation to view notifications screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UserNotifications()),
+    );
   }
 
   void _addAlert() {
@@ -206,6 +222,10 @@ class _MainScreenState extends State<MainScreen> {
 
   void _sendRequest() {
     // Implement navigation to send request screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RequestFormScreen()),
+    );
   }
 
   void _viewOrderDetails(Map<String, dynamic> data, String docId) {

@@ -1,36 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:shahan/models/request_model.dart';
-import 'package:shahan/services/request_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RequestFormController {
-  final RequestService _requestService = RequestService();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   bool isLoading = false;
 
   Future<void> createRequest(BuildContext context) async {
     isLoading = true;
+
     try {
-      // Validate input (if needed)
-      if (titleController.text.isEmpty || descriptionController.text.isEmpty) {
-        _showSnackBar(context, 'Please fill in all fields', Colors.red);
-        return;
+      // Get the current user's uid
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('No user is currently signed in');
       }
+      String uid = user.uid;
 
-      // Prepare request data
-      RequestModel requestData = RequestModel(
-        id: '', // Firestore will assign an ID
-        title: titleController.text,
-        description: descriptionController.text,
-        userId: 'current_user_id', // Replace with actual user ID logic
-      );
+      // Fetch the user's display name and email from Firestore
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('accounts')
+          .doc(uid)
+          .get();
+      String userEmail = userDoc['email'];
+      String userName = userDoc['name'];
 
-      // Call service to create request
-      await _requestService.createRequest(requestData);
+      // Create a request document with the uid
+      await FirebaseFirestore.instance.collection('requests').add({
+        'title': titleController.text,
+        'description': titleController.text,
+        'uid': uid,
+        'timestamp': FieldValue.serverTimestamp(),
+        'name': userName,
+        'email': userEmail,
+      });
 
-      // Navigate back or perform other actions after request creation
-      Navigator.pop(context, true);
+      titleController.clear();
+      descriptionController.clear();
+      // Show success message
+      _showSnackBar(context, 'Request created successfully', Colors.green);
     } catch (e) {
+      // Show error message
       _showSnackBar(context, 'Failed to create request', Colors.red);
     } finally {
       isLoading = false;
@@ -46,53 +57,3 @@ class RequestFormController {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
-
-
-
-
-
-
-// class RequestModel {
-//   final String id;
-//   final String name;
-//   final String email;
-//   final String task;
-//   final String details;
-//   final String workerType;
-//   final bool approved;
-
-//   RequestModel({
-//     required this.id,
-//     required this.name,
-//     required this.email,
-//     required this.task,
-//     required this.details,
-//     required this.workerType,
-//     required this.approved,
-//     required String userId,
-//   });
-
-//   factory RequestModel.fromMap(Map<String, dynamic> data, String id) {
-//     return RequestModel(
-//       id: id,
-//       name: data['name'] ?? '',
-//       email: data['email'] ?? '',
-//       task: data['task'] ?? '',
-//       details: data['details'] ?? '',
-//       workerType: data['workerType'] ?? '',
-//       approved: data['approved'] ?? false,
-//       userId: '',
-//     );
-//   }
-
-//   Map<String, dynamic> toMap() {
-//     return {
-//       'name': name,
-//       'email': email,
-//       'task': task,
-//       'details': details,
-//       'workerType': workerType,
-//       'approved': approved,
-//     };
-//   }
-// }

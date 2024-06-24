@@ -73,10 +73,6 @@ class AccountRequestDetailScreen extends StatelessWidget {
     }
   }
 
-  Future<void> _replyToUserRequest(BuildContext context) async {
-    // Implement reply functionality here
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,67 +81,62 @@ class AccountRequestDetailScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Name: ${requestData['name']}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            Text('Email: ${requestData['email']}',
-                style: TextStyle(fontSize: 16)),
-            Text('Location: ${requestData['location']}',
-                style: TextStyle(fontSize: 16)),
-            Text('Role: ${requestData['role']}',
-                style: TextStyle(fontSize: 16)),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.green,
+        child: Stack(children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Name: ${requestData['name']}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text('Email: ${requestData['email']}',
+                  style: TextStyle(fontSize: 16)),
+              Text('Location: ${requestData['location']}',
+                  style: TextStyle(fontSize: 16)),
+              Text('Role: ${requestData['role']}',
+                  style: TextStyle(fontSize: 16)),
+              SizedBox(height: 20),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    height: 30,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.green,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () => _approveUserRequest(context),
-                    child: Text(
-                      'Approve',
-                      style: TextStyle(fontSize: 14, color: Colors.black),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.red),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: ElevatedButton(
-                    onPressed: () => _rejectUserRequest(context),
-                    child: Text(
-                      'Reject',
-                      style: TextStyle(fontSize: 14, color: Colors.black),
+                    child: ElevatedButton(
+                      onPressed: () => _approveUserRequest(context),
+                      child: Text(
+                        'Approve',
+                        style: TextStyle(fontSize: 14, color: Colors.black),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: ElevatedButton(
-                    onPressed: () => _replyToUserRequest(context),
-                    child: Text(
-                      'Reply',
-                      style: TextStyle(fontSize: 14, color: Colors.black),
+                  Container(
+                    height: 30,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.red),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: ElevatedButton(
+                      onPressed: () => _rejectUserRequest(context),
+                      child: Text(
+                        'Reject',
+                        style: TextStyle(fontSize: 14, color: Colors.black),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ]),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shahan/controllers/main_controller.dart';
 import 'package:shahan/controllers/request_from_controller.dart';
 import 'package:shahan/widgets/custom_button.dart';
 import 'package:shahan/widgets/custom_text_field.dart';
@@ -12,12 +13,21 @@ class RequestFormScreen extends StatefulWidget {
 
 class _RequestFormScreenState extends State<RequestFormScreen> {
   final RequestFormController _controller = RequestFormController();
+  final MainController _maincontroller = MainController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Request'),
+        title: const Text('Account Request Screen'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              _maincontroller.signOut(context);
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -34,13 +44,29 @@ class _RequestFormScreenState extends State<RequestFormScreen> {
             ),
             const SizedBox(height: 32.0),
             CustomButton(
-              title: 'Create Request',
-              isLoading: _controller.isLoading,
-              onPressed: () => _controller.createRequest(context),
-            ),
+                title: 'Create Request',
+                isLoading: _controller.isLoading,
+                onPressed: () {
+                  if (_controller.titleController.text.isEmpty ||
+                      _controller.descriptionController.text.isEmpty) {
+                    _showSnackBar(
+                        context, 'please fill the required field', Colors.red);
+                  } else {
+                    _controller.createRequest(context);
+                  }
+                }),
           ],
         ),
       ),
     );
   }
+}
+
+void _showSnackBar(
+    BuildContext context, String message, Color backgroundColor) {
+  final snackBar = SnackBar(
+    content: Text(message),
+    backgroundColor: backgroundColor,
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
