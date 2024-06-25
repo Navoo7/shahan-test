@@ -5,6 +5,7 @@ import 'package:shahan/views/account_request_screen.dart';
 import 'package:shahan/views/notifications_user.dart';
 import 'package:shahan/views/other_request.dart';
 import 'package:shahan/views/request_form_screen.dart';
+import 'package:shahan/views/send_notifications.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key, required this.userRole}) : super(key: key);
@@ -97,36 +98,42 @@ class _MainScreenState extends State<MainScreen> {
           ],
         );
       case 'worker':
-        return StreamBuilder<QuerySnapshot>(
-          stream: _db
-              .collection('workers')
-              .doc(_controller.currentUser?.uid)
-              .collection('orders')
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            }
-            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return Center(child: Text('No orders found.'));
-            }
-
-            List<DocumentSnapshot> docs = snapshot.data!.docs;
-
-            return ListView.builder(
-              itemCount: docs.length,
-              itemBuilder: (context, index) {
-                Map<String, dynamic> data =
-                    docs[index].data() as Map<String, dynamic>;
-                String docId = docs[index].id;
-                return _buildOrderCard(data, docId);
-              },
-            );
-          },
+        return ListView(
+          children: [
+            _buildCard(
+                'Notifications', Icons.notifications, _viewNotifications),
+          ],
         );
+      // return StreamBuilder<QuerySnapshot>(
+      //   stream: _db
+      //       .collection('workers')
+      //       .doc(_controller.currentUser?.uid)
+      //       .collection('orders')
+      //       .snapshots(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return Center(child: CircularProgressIndicator());
+      //     }
+      //     if (snapshot.hasError) {
+      //       return Center(child: Text('Error: ${snapshot.error}'));
+      //     }
+      //     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+      //       return Center(child: Text('No orders found.'));
+      //     }
+
+      //     List<DocumentSnapshot> docs = snapshot.data!.docs;
+
+      //     return ListView.builder(
+      //       itemCount: docs.length,
+      //       itemBuilder: (context, index) {
+      //         Map<String, dynamic> data =
+      //             docs[index].data() as Map<String, dynamic>;
+      //         String docId = docs[index].id;
+      //         return _buildOrderCard(data, docId);
+      //       },
+      //     );
+      //   },
+      // );
       default:
         return Center(child: Text('Unsupported user role: $userRole'));
     }
@@ -202,13 +209,20 @@ class _MainScreenState extends State<MainScreen> {
 
   void _sendNotifications() {
     // Implement navigation to send notifications screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SendNotificationScreen()),
+    );
   }
 
   void _viewNotifications() {
-    // Implement navigation to view notifications screen
+    // Replace '' with widget.userRole or the appropriate user role string
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => UserNotifications()),
+      MaterialPageRoute(
+          builder: (context) => UserNotifications(
+                userRole: widget.userRole,
+              )),
     );
   }
 
