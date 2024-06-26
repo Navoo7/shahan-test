@@ -46,7 +46,7 @@ class NotificationServices {
           _firebaseMessagingBackgroundHandler);
 
       if (fcmToken != null) {
-        await FirebaseMessaging.instance.subscribeToTopic("all");
+        await FirebaseMessaging.instance.subscribeToTopic("user");
       }
     } catch (e) {
       print('Error in initNotification: $e');
