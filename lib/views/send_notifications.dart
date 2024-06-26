@@ -29,11 +29,13 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
     }
 
     try {
-      // Assuming _selectedRecipient is set correctly based on your dropdown logic
-      // You might need to adjust this based on how you set _selectedRecipient
       String recipientTopic = '/topics/$_selectedRecipient';
 
-      // Call SendNotification directly without await since it's void
+      // Save notification to collection
+      await _notificationServices.saveNotification(
+          title, message, recipientTopic);
+
+      // Send notification
       _notificationServices.SendNotification(title, message, recipientTopic);
 
       _titleController.clear();

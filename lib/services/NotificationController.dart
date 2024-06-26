@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -45,8 +46,6 @@ class NotificationServices {
           _firebaseMessagingBackgroundHandler);
 
       if (fcmToken != null) {
-        // UserController().updateToken(fcmToken);
-        // await sharePreferences!.setString('token', fcmToken);
         await FirebaseMessaging.instance.subscribeToTopic("all");
       }
     } catch (e) {
@@ -54,7 +53,6 @@ class NotificationServices {
     }
   }
 
-  // For IoS
   Future forgroundMessage() async {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
@@ -69,7 +67,6 @@ class NotificationServices {
       print("Notification title: ${notification.body}");
       print("Data: ${message.data.toString()}");
 
-      // For IoS
       if (Platform.isIOS) {
         forgroundMessage();
       }
@@ -132,17 +129,15 @@ class NotificationServices {
   }
 
   Future<void> setupInteractMessage(BuildContext context) async {
-    // when app is terminated
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
-      //   handleMesssage(context, initialMessage);
+      // handleMesssage(context, initialMessage);
     }
 
-    //when app ins background
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      //   handleMesssage(context, event);
+      // handleMesssage(context, event);
     });
   }
 
@@ -191,6 +186,25 @@ class NotificationServices {
 
     // Return the access token
     return credentials.accessToken.data;
+  }
+
+  Future<void> saveNotification(
+      String title, String message, String recipientTopic) async {
+    try {
+      // Implement your logic to save notification to collection
+      // Example:
+      await FirebaseFirestore.instance.collection('notifications').add({
+        'title': title,
+        'message': message,
+        'recipientTopic': recipientTopic,
+        'timestamp': Timestamp.now(),
+      });
+
+      // Replace the above commented-out code with your actual implementation
+    } catch (e) {
+      print('Error saving notification: $e');
+      throw e; // Optional: Propagate the error if needed
+    }
   }
 
   void SendNotification(String title, String desc, String token) async {
