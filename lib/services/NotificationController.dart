@@ -196,7 +196,7 @@ class NotificationServices {
       await FirebaseFirestore.instance.collection('notifications').add({
         'title': title,
         'message': message,
-        'recipientTopic': recipientTopic,
+        'recipient': recipientTopic,
         'timestamp': Timestamp.now(),
       });
 
