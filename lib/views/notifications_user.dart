@@ -65,14 +65,14 @@ class _UserNotificationsState extends State<UserNotifications> {
         if (widget.userRole == 'user') {
           // Users should see notifications intended for 'users' or 'All'
           result.addAll(notifications.where((notification) =>
-              notification['data']['recipient'] == 'user' ||
-              notification['data']['recipient'] == 'All'));
+              notification['data']['recipient'] == '/topics/user' ||
+              notification['data']['recipient'] == '/topics/All'));
           result.addAll(replies);
         } else if (widget.userRole == 'worker') {
           // Workers should see notifications intended for 'workers', 'All', and their specific notifications
           result.addAll(notifications.where((notification) =>
-              notification['data']['recipient'] == 'worker' ||
-              notification['data']['recipient'] == 'All' ||
+              notification['data']['recipient'] == '/topics/worker' ||
+              notification['data']['recipient'] == '/topics/All' ||
               (notification['data']['recipient'] == _currentUser.uid &&
                   notification['data']['type'] == 'notification')));
           result.addAll(replies);

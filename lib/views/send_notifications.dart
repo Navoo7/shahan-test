@@ -29,7 +29,8 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
     }
 
     try {
-      String recipientTopic = '$_selectedRecipient';
+      // String recipientTopic = '$_selectedRecipient';
+      String recipientTopic = '/topics/$_selectedRecipient';
 
       // Save notification to collection
       await _notificationServices.saveNotification(

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -8,9 +9,31 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
+import 'package:shahan/services/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationServices {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<String> fetchUserRole(String uid) async {
+    try {
+      // Query Firestore to fetch user role
+      DocumentSnapshot<Map<String, dynamic>> snapshot =
+          await _firestore.collection('users').doc(uid).get();
+
+      if (snapshot.exists) {
+        return snapshot.data()?['role'] ?? 'unknown';
+      } else {
+        print('User not found in Firestore');
+        return 'unknown';
+      }
+    } catch (e) {
+      print('Error fetching user role: $e');
+      throw e; // Optional: Propagate the error if needed
+    }
+  }
 
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -38,15 +61,38 @@ class NotificationServices {
           AuthorizationStatus.authorized) {
         print('User granted permission');
       } else {
-        // open app settings
+        // Open app settings or handle accordingly
       }
 
       var fcmToken = await FirebaseMessaging.instance.getToken();
       FirebaseMessaging.onBackgroundMessage(
           _firebaseMessagingBackgroundHandler);
 
-      if (fcmToken != null) {
-        await FirebaseMessaging.instance.subscribeToTopic("user");
+      // Get current user
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        // Fetch user role from Firestore based on user.uid
+        String userRole = await fetchUserRole(user.uid);
+
+        // Subscribe to appropriate topic based on user role
+        switch (userRole) {
+          case 'user':
+            await FirebaseMessaging.instance.subscribeToTopic('user');
+            break;
+          case 'worker':
+            await FirebaseMessaging.instance.subscribeToTopic('worker');
+            break;
+          default:
+            print('Unknown user role: $userRole');
+            // Handle default case or error scenario
+            break;
+        }
+
+        // Print current user role for debugging
+        print('Current user role: $userRole');
+      } else {
+        print('User not authenticated');
       }
     } catch (e) {
       print('Error in initNotification: $e');
@@ -81,7 +127,7 @@ class NotificationServices {
   void initLocalNotifications(
       BuildContext context, RemoteMessage message) async {
     var androidInitSettings =
-        const AndroidInitializationSettings('@mipmap/launcher_icon');
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
 
     var iosInitSettings = const DarwinInitializationSettings();
     var initSettings = InitializationSettings(
