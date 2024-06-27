@@ -39,9 +39,7 @@ class NotificationServices {
   }
 
   Future<String?> fetchRecipientTopic() async {
-    // Example implementation, replace with your actual logic to fetch recipient topic
     try {
-      // Replace with your Firestore document fetch logic
       DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
           .instance
           .collection('notifications')
@@ -269,17 +267,12 @@ class NotificationServices {
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
 
-    if (initialMessage != null) {
-      // handleMesssage(context, initialMessage);
-    }
+    if (initialMessage != null) {}
 
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      // handleMesssage(context, event);
-    });
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {});
   }
 
   Future<String> getAccessToken() async {
-    //  client ID and client secret obtained from Google Cloud Console
     final serviceAccountJson = {
       "type": "service_account",
       "project_id": "shahan-app",
@@ -321,23 +314,18 @@ class NotificationServices {
     // Close the HTTP client
     client.close();
 
-    // Return the access token
     return credentials.accessToken.data;
   }
 
   Future<void> saveNotification(
       String title, String message, String recipientTopic) async {
     try {
-      // Implement your logic to save notification to collection
-      // Example:
       await FirebaseFirestore.instance.collection('notifications').add({
         'title': title,
         'message': message,
         'recipient': recipientTopic,
         'timestamp': Timestamp.now(),
       });
-
-      // Replace the above commented-out code with your actual implementation
     } catch (e) {
       print('Error saving notification: $e');
       throw e; // Optional: Propagate the error if needed
