@@ -253,6 +253,7 @@ class NotificationServices {
           'notification': {
             "title": title,
             "body": desc,
+            "icon": "ic_notification",
           }
         }
       };
