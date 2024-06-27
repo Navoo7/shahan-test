@@ -46,6 +46,8 @@ dependencies:
   googleapis_auth: ^1.4.1
   googleapis: ^13.1.0
   flutter_local_notifications: ^17.1.2
+  firebase_analytics: ^11.1.0
+
 
 
 

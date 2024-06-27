@@ -26,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_onControllerUpdate); // Add listener for updates
+    _controller.addListener(_onControllerUpdate);
     _notificationServices.initNotification();
     _notificationServices.forgroundMessage();
     _notificationServices.firebaseInit(context);

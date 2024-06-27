@@ -31,10 +31,10 @@ class _SendNotificationScreenState extends State<SendNotificationScreen> {
     try {
       // String recipientTopic = '$_selectedRecipient';
       String recipientTopic = '/topics/$_selectedRecipient';
+      String reciption = '$_selectedRecipient';
 
       // Save notification to collection
-      await _notificationServices.saveNotification(
-          title, message, recipientTopic);
+      await _notificationServices.saveNotification(title, message, reciption);
 
       // Send notification
       _notificationServices.SendNotification(title, message, recipientTopic);
