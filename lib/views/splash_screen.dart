@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shahan/controllers/splash_controller.dart';
 import 'package:shahan/core/MyImage.dart';
+import 'package:shahan/services/NotificationController.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,11 +12,16 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final SplashController _controller = SplashController();
+  // NotificationServices _notificationServices = NotificationServices();
 
   @override
   void initState() {
     super.initState();
     _controller.startTimer(context);
+    // _notificationServices.initNotification();
+    // _notificationServices.forgroundMessage();
+    // _notificationServices.firebaseInit(context);
+    // _notificationServices.setupInteractMessage(context);
   }
 
   @override

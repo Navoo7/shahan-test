@@ -17,21 +17,46 @@ class NotificationServices {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Class-level variable to store the user role
+  String _userRole = 'All';
+
   Future<String> fetchUserRole(String uid) async {
     try {
       // Query Firestore to fetch user role
       DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await _firestore.collection('users').doc(uid).get();
+          await _firestore.collection('accounts').doc(uid).get();
 
       if (snapshot.exists) {
-        return snapshot.data()?['role'] ?? 'unknown';
+        return snapshot.data()?['role'] ?? 'All';
       } else {
         print('User not found in Firestore');
-        return 'unknown';
+        return 'All';
       }
     } catch (e) {
       print('Error fetching user role: $e');
-      throw e; // Optional: Propagate the error if needed
+      return 'All'; // Return 'unknown' on error
+    }
+  }
+
+  Future<String?> fetchRecipientTopic() async {
+    // Example implementation, replace with your actual logic to fetch recipient topic
+    try {
+      // Replace with your Firestore document fetch logic
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('notifications')
+          .doc('your_document_id')
+          .get();
+
+      if (snapshot.exists) {
+        return snapshot.data()?['recipientTopic'];
+      } else {
+        print('Document does not exist');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching recipient topic: $e');
+      return null;
     }
   }
 
@@ -57,6 +82,7 @@ class NotificationServices {
         criticalAlert: true,
         provisional: false,
       );
+
       if (_notifySettings.authorizationStatus ==
           AuthorizationStatus.authorized) {
         print('User granted permission');
@@ -73,24 +99,31 @@ class NotificationServices {
 
       if (user != null) {
         // Fetch user role from Firestore based on user.uid
-        String userRole = await fetchUserRole(user.uid);
+        _userRole = await fetchUserRole(user.uid);
 
-        // Subscribe to appropriate topic based on user role
-        switch (userRole) {
-          case 'user':
+        // Debug print user role
+        print('Fetched user role: $_userRole');
+
+        // Subscribe to appropriate topic based on user role and recipientTopic
+        String? recipientTopic =
+            await fetchRecipientTopic(); // Fetch recipient topic from Firestore or wherever it's stored
+
+        if (_userRole != null && recipientTopic != null) {
+          if (_userRole == recipientTopic) {
+            await FirebaseMessaging.instance.subscribeToTopic(_userRole);
+            print('Subscribed to topic: $_userRole');
+          } else {
             await FirebaseMessaging.instance.subscribeToTopic('user');
-            break;
-          case 'worker':
             await FirebaseMessaging.instance.subscribeToTopic('worker');
-            break;
-          default:
-            print('Unknown user role: $userRole');
-            // Handle default case or error scenario
-            break;
+            print('Subscribed to topics: user and worker');
+          }
+        } else {
+          print('User role or recipient topic is null');
+          // Handle error scenario where user role or recipient topic is not fetched properly
         }
 
         // Print current user role for debugging
-        print('Current user role: $userRole');
+        print('Current user role: $_userRole');
       } else {
         print('User not authenticated');
       }
@@ -98,6 +131,64 @@ class NotificationServices {
       print('Error in initNotification: $e');
     }
   }
+
+  // Future<void> initNotification() async {
+  //   try {
+  //     NotificationSettings _notifySettings =
+  //         await FirebaseMessaging.instance.requestPermission(
+  //       sound: true,
+  //       badge: true,
+  //       alert: true,
+  //       carPlay: true,
+  //       criticalAlert: true,
+  //       provisional: false,
+  //     );
+
+  //     if (_notifySettings.authorizationStatus ==
+  //         AuthorizationStatus.authorized) {
+  //       print('User granted permission');
+  //     } else {
+  //       // Open app settings or handle accordingly
+  //     }
+
+  //     var fcmToken = await FirebaseMessaging.instance.getToken();
+  //     FirebaseMessaging.onBackgroundMessage(
+  //         _firebaseMessagingBackgroundHandler);
+  //     // Get current user
+  //     User? user = _auth.currentUser;
+
+  //     if (user != null) {
+  //       // Fetch user role from Firestore based on user.uid
+  //       _userRole = await fetchUserRole(user.uid);
+
+  //       // Debug print user role
+  //       print('Fetched user role: $_userRole');
+
+  //       // Subscribe to appropriate topic based on user role
+  //       if (_userRole == 'user') {
+  //         await FirebaseMessaging.instance.subscribeToTopic('user');
+  //         print('Subscribed to topic: user');
+  //       } else if (_userRole == 'worker') {
+  //         await FirebaseMessaging.instance.subscribeToTopic('worker');
+  //         print('Subscribed to topic: worker');
+  //       } else if (_userRole == 'All') {
+  //         await FirebaseMessaging.instance.subscribeToTopic('user');
+  //         await FirebaseMessaging.instance.subscribeToTopic('worker');
+  //         print('Subscribed to topics: user and worker');
+  //       } else {
+  //         print('Unknown user role: $_userRole');
+  //         // Handle default case or error scenario
+  //       }
+
+  //       // Print current user role for debugging
+  //       print('Current user role: $_userRole');
+  //     } else {
+  //       print('User not authenticated');
+  //     }
+  //   } catch (e) {
+  //     print('Error in initNotification: $e');
+  //   }
+  // }
 
   Future forgroundMessage() async {
     await FirebaseMessaging.instance

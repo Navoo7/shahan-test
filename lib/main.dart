@@ -25,15 +25,15 @@ class Shahan extends StatefulWidget {
   State<Shahan> createState() => _ShahanState();
 }
 
-NotificationServices _notificationServices = NotificationServices();
+// NotificationServices _notificationServices = NotificationServices();
 
 class _ShahanState extends State<Shahan> {
   @override
   void initState() {
-    _notificationServices.initNotification();
-    _notificationServices.forgroundMessage();
-    _notificationServices.firebaseInit(context);
-    _notificationServices.setupInteractMessage(context);
+    // _notificationServices.initNotification();
+    // _notificationServices.forgroundMessage();
+    // _notificationServices.firebaseInit(context);
+    // _notificationServices.setupInteractMessage(context);
     super.initState();
   }
 
