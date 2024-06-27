@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shahan/models/user_model.dart';
+import 'package:shahan/services/NotificationController.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final NotificationServices _notificationServices = NotificationServices();
 
   Future<UserModel?> signIn(String email, String password) async {
     try {
@@ -13,6 +16,7 @@ class AuthService {
         email: email,
         password: password,
       );
+      await _saveLoginState(true);
       return _userFromFirebase(userCredential.user);
     } catch (e) {
       rethrow;
@@ -38,9 +42,10 @@ class AuthService {
           .set({
         'name': name,
         'email': email,
-        'role': 'user', // Set a default role (you can customize this)
+        'role': 'user',
       });
 
+      await _saveLoginState(true);
       return _userFromFirebase(userCredential.user);
     } catch (e) {
       rethrow;
@@ -68,5 +73,12 @@ class AuthService {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+    await _notificationServices.unsubscribeFromTopics();
+    await _saveLoginState(false);
+  }
+
+  Future<void> _saveLoginState(bool isLoggedIn) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', isLoggedIn);
   }
 }

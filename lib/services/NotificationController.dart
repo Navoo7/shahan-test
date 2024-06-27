@@ -98,6 +98,32 @@ class NotificationServices {
     }
   }
 
+  Future<void> unsubscribeFromTopics() async {
+    try {
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        String userRole = await fetchUserRole(user.uid);
+
+        if (userRole == 'user') {
+          await FirebaseMessaging.instance.unsubscribeFromTopic('user');
+          await FirebaseMessaging.instance.unsubscribeFromTopic('All');
+          print('Unsubscribed from topic: user');
+        } else if (userRole == 'worker') {
+          await FirebaseMessaging.instance.unsubscribeFromTopic('worker');
+          await FirebaseMessaging.instance.unsubscribeFromTopic('All');
+          print('Unsubscribed from topic: worker');
+        } else {
+          print('Unknown user role: $userRole');
+        }
+      } else {
+        print('User not authenticated');
+      }
+    } catch (e) {
+      print('Error in unsubscribeFromTopics: $e');
+    }
+  }
+
   Future forgroundMessage() async {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
@@ -253,7 +279,6 @@ class NotificationServices {
           'notification': {
             "title": title,
             "body": desc,
-            "icon": "ic_notification",
           }
         }
       };
